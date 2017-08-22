@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SensorDetections</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="interstitial_ad_sample">Interstitial Ad Sample</string>
+    <string name="start_level">Level 1</string>
+    <string name="next_level">SHOW ADVERTISEMENT</string>
+    <!-- -
+        This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
+        For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <!--<string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>-->
+    <string name="interstitial_ad_unit_id">/1570354/HRN-home-320x50</string>
+    <string name="sensor_title">Title</string>
+    <string name="sensor_type">Acceleration Force (m/s<sup>2</sup>)</string>
+    <string name="x_axis_acceleration_force">X-Acceleration Force</string>
+    <string name="y_axis_acceleration_force">Y-Acceleration Force</string>
+    <string name="potential_violation">Potential Violations</string>
+    <string name="fare_expended_violation">Over Stay Violations</string>
+    <string name="z_axis_acceleration_force">Y-Acceleration Force</string>
+    <string name="over_stay">Over Stay</string>
+    <string name="force_of_gravity">Force of Gravity</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="upload">Upload</string>
+</resources>
