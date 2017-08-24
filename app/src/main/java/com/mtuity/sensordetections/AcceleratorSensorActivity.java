@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -45,9 +44,7 @@ public class AcceleratorSensorActivity extends Activity implements SensorEventLi
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-
-     //   Sensor mySensor = sensorEvent.sensor;
-
+//   Sensor mySensor = sensorEvent.sensor;
 //        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 //            float x = sensorEvent.values[0];
 //            float y = sensorEvent.values[1];
@@ -64,7 +61,6 @@ public class AcceleratorSensorActivity extends Activity implements SensorEventLi
 //                if (speed > SHAKE_THRESHOLD) {
 //                    getRandomNumber();
 //                }
-//
 //                last_x = x;
 //                last_y = y;
 //                last_z = z;
@@ -78,26 +74,23 @@ public class AcceleratorSensorActivity extends Activity implements SensorEventLi
         if (Math.abs(x) > Math.abs(y)) {
             if (x < 0) {
                 //iv.setImageResource(R.drawable.right);
-                Toast.makeText(this,"Right motion",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Right motion", Toast.LENGTH_LONG).show();
             }
             if (x > 0) {
                 //iv.setImageResource(R.drawable.left);
-                Toast.makeText(this,"Left motion",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Left motion", Toast.LENGTH_LONG).show();
             }
         } else {
             if (y < 0) {
                 //iv.setImageResource(R.drawable.top);
-                Toast.makeText(this,"Top motion",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Top motion", Toast.LENGTH_LONG).show();
             }
             if (y > 0) {
-               // iv.setImageResource(R.drawable.bottom);
-                Toast.makeText(this,"Bottom motion",Toast.LENGTH_LONG).show();
+                // iv.setImageResource(R.drawable.bottom);
+                Toast.makeText(this, "Bottom motion", Toast.LENGTH_LONG).show();
             }
         }
-//        if (x > (-2) && x < (2) && y > (-2) && y < (2)) {
-//           // iv.setImageResource(R.drawable.center);
-//            Toast.makeText(this,"Center motion",Toast.LENGTH_LONG).show();
-//        }
+
     }
 
     @Override
@@ -131,30 +124,30 @@ public class AcceleratorSensorActivity extends Activity implements SensorEventLi
             Random randNumber = new Random();
             int iNumber = randNumber.nextInt(48) + 1;
 
-            if(!numbersGenerated.contains(iNumber)) {
+            if (!numbersGenerated.contains(iNumber)) {
                 numbersGenerated.add(iNumber);
             } else {
                 i--;
             }
         }
 
-        TextView text = (TextView)findViewById(R.id.number_1);
-        text.setText(""+numbersGenerated.get(0));
+        TextView text = (TextView) findViewById(R.id.number_1);
+        text.setText("" + numbersGenerated.get(0));
 
-        text = (TextView)findViewById(R.id.number_2);
-        text.setText(""+numbersGenerated.get(1));
+        text = (TextView) findViewById(R.id.number_2);
+        text.setText("" + numbersGenerated.get(1));
 
-        text = (TextView)findViewById(R.id.number_3);
-        text.setText(""+numbersGenerated.get(2));
+        text = (TextView) findViewById(R.id.number_3);
+        text.setText("" + numbersGenerated.get(2));
 
-        text = (TextView)findViewById(R.id.number_4);
-        text.setText(""+numbersGenerated.get(3));
+        text = (TextView) findViewById(R.id.number_4);
+        text.setText("" + numbersGenerated.get(3));
 
-        text = (TextView)findViewById(R.id.number_5);
-        text.setText(""+numbersGenerated.get(4));
+        text = (TextView) findViewById(R.id.number_5);
+        text.setText("" + numbersGenerated.get(4));
 
-        text = (TextView)findViewById(R.id.number_6);
-        text.setText(""+numbersGenerated.get(5));
+        text = (TextView) findViewById(R.id.number_6);
+        text.setText("" + numbersGenerated.get(5));
 
         FrameLayout ball1 = (FrameLayout) findViewById(R.id.ball_1);
         ball1.setVisibility(View.INVISIBLE);

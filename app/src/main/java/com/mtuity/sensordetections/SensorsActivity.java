@@ -8,8 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,7 +51,7 @@ import retrofit.client.Response;
  * Created by kalyani on 21/7/17.
  */
 
-public class SensorsActivity extends BaseAppCompatActivity implements SensorEventListener, View.OnClickListener, com.google.android.gms.location.LocationListener {
+public class SensorsActivity extends BaseAppCompatActivity implements SensorEventListener, View.OnClickListener {
 
     private static final int PERMISSIONS_LOCATION = 100;
     private static final int EMAIL_REQUEST_CODE = 101;
@@ -72,6 +70,7 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
     public static final String MAP_ACCESS_TOKEN = "pk.eyJ1IjoiYW5pdGhhIiwiYSI6ImNpandwZzVsZzBtd3d2Mm01czFvZ2hnb24ifQ.GKDUFD8mPIQwwOALNveP5g";
     private boolean checkGPS;
     private boolean checkNetwork;
+    private boolean isNetworkEnabled;
     //"pk.eyJ1IjoiZGhhcm1hc2FpIiwiYSI6ImNpaThtOHk0aTAwaWFzem0zODFlaG5mcWcifQ.dYfawnh8JbC-TiqBxap6jQ";//pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q
 
 
@@ -118,55 +117,19 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
     private void initiateRequestPermissions() {
 
 
-        locationManager = (LocationManager) this
-                .getSystemService(LOCATION_SERVICE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                || (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
 
-        // get GPS status
-        checkGPS = locationManager
-                .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        // get network provider status
-        checkNetwork = locationManager
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if (!checkGPS && !checkNetwork) {
-            Toast.makeText(this, "No Service Provider is available", Toast.LENGTH_SHORT).show();
-        } else {
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                    || (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_LOCATION);
-                return;
-            }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_LOCATION);
+            return;
         }
 
+        GPSTracker gpsTracker = new GPSTracker(this);
+        currentLatitude = gpsTracker.getLatitude();
+        currentLongitude = gpsTracker.getLongitude();
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                currentLatitude = location.getLatitude();
-                currentLongitude = location.getLongitude();
-                Log.i("Sensor", " SensorData onCreate: " + location.getLatitude() + "," + location.getLongitude());
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        });
     }
 
     @Override
@@ -208,14 +171,6 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
         // new DrawGraph().execute(sensorData);
 
     }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
-        Log.i("Sensor", " SensorData GMS: " + location.getLatitude() + "," + location.getLongitude());
-    }
-
 
     private class DrawGraph extends AsyncTask<CopyOnWriteArrayList<AccelData>, Void, ChartModel> {
 
@@ -449,6 +404,9 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
                 break;
             case R.id.upload_btn:
                 //uploadCSVFile();
+                GPSTracker gpsTracker = new GPSTracker(this);
+                currentLatitude = gpsTracker.getLatitude();
+                currentLongitude = gpsTracker.getLongitude();
                 callServiceOfReverseCoding(new LatLng(currentLatitude, currentLongitude));
                 break;
             default:
@@ -480,11 +438,14 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
 
     private void prepareCSVFile() {
 
+        GPSTracker gpsTracker = new GPSTracker(this);
         String columnString = "TimeStamp,X-Value,Y-Value,Z-Value,Latitude,Longitude";
 
         StringBuilder builder = new StringBuilder();
 
         for (AccelData obj : sensorData) {
+            currentLatitude = gpsTracker.getLatitude();
+            currentLongitude = gpsTracker.getLongitude();
             builder.append(obj.getTimestamp() + "," + obj.getX() + ","
                     + obj.getY() + "," + obj.getZ() + "," + currentLatitude + "," + currentLongitude + "\n");
         }
@@ -517,5 +478,6 @@ public class SensorsActivity extends BaseAppCompatActivity implements SensorEven
             }
         }
     }
+
 
 }
